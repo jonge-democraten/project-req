@@ -47,9 +47,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'project_req.urls'
+ROOT_URLCONF = 'jd_projects_site.urls'
 
-WSGI_APPLICATION = 'project_req.wsgi.application'
+WSGI_APPLICATION = 'jd_projects_site.wsgi.application'
 
 
 # Database
@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'project_req.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'projects.db'),
     }
 }
 
