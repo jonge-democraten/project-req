@@ -16,20 +16,20 @@ class ProjectRequestForm(BetterModelForm):
         fieldsets = [
             ('Project details', {
                 'fields': ['project_title', 'project_org', 'project_location', 'project_date', 'project_desc',
-                    'project_goal'],
+                           'project_goal'],
                 'description': 'Details van het project zelf.'
             }),
             ('Aanvrager', {
                 'fields': ['requester_org', 'requester_name', 'requester_title', 'requester_address', 
-                    'requester_postcode', 'requester_city', 'requester_email', 'requester_phone'],
+                           'requester_postcode', 'requester_city', 'requester_email', 'requester_phone'],
                 'description': 'Gegevens van de aanvrager.'
             })
         ]
 
 class ExpenseIncomeForm(BetterForm):
     description = forms.CharField(max_length=255)
-    amount = forms.DecimalField(max_digits=2)
+    amount = forms.DecimalField(max_digits=6, decimal_places=2)
 
-ExpenseIncomeFormSet = formset_factory(ExpenseIncomeForm)
+ExpenseIncomeFormSet = formset_factory(ExpenseIncomeForm, extra=3)
 
 

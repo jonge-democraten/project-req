@@ -1,7 +1,9 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 
 class Project(models.Model):
     project_title = models.CharField(max_length=200)
+    project_slug = models.SlugField(max_length=255)
     project_org = models.CharField(max_length=200)
     project_location = models.CharField(max_length=255)
     project_date = models.DateTimeField()
@@ -16,6 +18,10 @@ class Project(models.Model):
     requester_city = models.CharField(max_length=50)
     requester_email = models.EmailField()
     requester_phone = models.CharField(max_length=15)
+
+    def save(self, *args, **kwars):
+        self.slug = slugify("{}-{}".format(self.project_org, self.project_title))
+        super(Project, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.project_title
