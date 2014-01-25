@@ -6,6 +6,7 @@
 
 {% block content %}
 <form class="form-horizontal" method="post" action="{% url 'request_project' %}">
+{% csrf_token %}
 {% for fieldset in form.fieldsets %}
 <div class="panel panel-primary">
     {% if fieldset.legend %}
@@ -18,7 +19,7 @@
     {% endif %}
 
     {% for field in fieldset %}
-        <div class="form-group">
+        <div class="form-group {% if field.errors %}has-error{% endif %}">
             <label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}</label>
             <div class="col-sm-10">
                 {% render_field field class="form-control" %}
@@ -31,17 +32,53 @@
 <div class="panel panel-success">
     <div class="panel-heading">Begrote inkomsten</div>
 
+    {{ expected_income_formset.management_form }}
+
     <table class="table table-striped">
-    {{ expected_income_formset }}
+    {% for form in expected_income_formset %}
+    <tr class="row">
+        <td class="col-sm-10">
+            <div classs="form-group {% if form.description.errors %}has-error{% endif %}">
+                {% render_field form.description placeholder=form.description.label class+="form-control" %}
+            </div>
+        </td>
+        <td class="col-sm-2">
+            <div class="input-group {% if form.description.errors %}has-error{% endif %}">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-euro"></span></span>
+                {% render_field form.amount placeholder=form.amount.label class+="form-control" %}
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
     </table>
+    <div class="panel-body">
+        <button type="submit" class="btn btn-success">Meer</button>
+    </div>
 </div>
 
 <div class="panel panel-warning">
     <div class="panel-heading">Begrote uitgaven</div>
 
+    {{ expected_expense_formset.management_form }}
+
     <table class="table table-striped">
-    {{ expected_expense_formset }}
+    {% for form in expected_expense_formset %}
+    <tr class="row">
+        <td class="col-sm-10">
+            {% render_field form.description placeholder=form.description.label class+="form-control" %}
+        </td>
+        <td class="col-sm-2">
+            <div class="input-group">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-euro"></span></span>
+                {% render_field form.amount placeholder=form.amount.label class+="form-control" %}
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
     </table>
+    <div class="panel-body">
+        <button type="submit" class="btn btn-warning">Meer</button>
+    </div>
 </div>
 
 <button type="submit" class="btn btn-primary btn-lg">Aanvragen</button>
