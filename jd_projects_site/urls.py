@@ -1,10 +1,15 @@
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import patterns, include, url, static
 from django.conf import settings
 
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = []
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()
+
+urlpatterns += patterns('',
     # Examples:
     # url(r'^$', 'jd_projects.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -14,5 +19,3 @@ urlpatterns = patterns('',
     url(r'^projects/', include('jd_projects.urls'))
 )
 
-if settings.DEBUG:
-   urlpatterns += static.static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
