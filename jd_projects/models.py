@@ -19,8 +19,8 @@ class Project(models.Model):
     requester_email = models.EmailField()
     requester_phone = models.CharField(max_length=15)
 
-    def save(self, *args, **kwars):
-        self.slug = slugify("{}-{}".format(self.project_org, self.project_title))
+    def save(self, *args, **kwargs):
+        self.project_slug = slugify("{}-{}".format(self.project_org, self.project_title))
         super(Project, self).save(*args, **kwargs)
 
     def __unicode__(self):
