@@ -17,22 +17,27 @@ class ProjectRequestView(CreateView):
         expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
 
         if income_formset.is_valid() and expense_formset.is_valid():
-            super(ProjectRequestView, self).form_valid(form)
+            response = super(ProjectRequestView, self).form_valid(form)
 
             # Save income/expenses for project
             for form in income_formset:
-                income = ProjectIncomeExpenses()
-                income.project = self.object
-                income.description = form.cleaned_data['description']
-                income.amount = form.cleaned_data['amount']
-                income.save()
+                if form.cleaned_data:
+                    income = ProjectIncomeExpenses()
+                    income.project = self.object
+                    print form.cleaned_data
+                    income.description = form.cleaned_data['description']
+                    income.amount = form.cleaned_data['amount']
+                    income.save()
 
             for form in expense_formset:
-                expense = ProjectIncomeExpenses()
-                expense.project = self.object
-                expense.description = form.cleaned_data['description']
-                expense.amount = -form.cleaned_data['amount']
-                expense.save()
+                if form.cleaned_data:
+                    expense = ProjectIncomeExpenses()
+                    expense.project = self.object
+                    expense.description = form.cleaned_data['description']
+                    expense.amount = -form.cleaned_data['amount']
+                    expense.save()
+
+            return response
         else:
             self.form_invalid(form)
 
