@@ -1,16 +1,15 @@
 from django.shortcuts import render
-from djamgo.core.urlresolvers import reverse
-from django.views.generic.edit import ModelFormMixin, ProcessFormView
+from django.views.generic.edit import CreateView
 
 from jd_projects.models import Project, ProjectIncomeExpenses
 from jd_projects.forms import ProjectRequestForm, ExpenseIncomeFormSet
 
-class ProjectRequestView(ModelFormMixin, ProcessFormView):
+class ProjectRequestView(CreateView):
     model = Project
     slug_field = 'project_slug'
     form_class = ProjectRequestForm
     prefix = 'project'
-    success_url = reverse('request_success')
+    success_url = '/projects/request_success/'
 
     def form_valid(self, form):
         # If the project form is valid, we move on to checking the expected income and expenses
@@ -37,11 +36,17 @@ class ProjectRequestView(ModelFormMixin, ProcessFormView):
         else:
             self.form_invalid(form)
 
-
     def get_context_data(self, **kwargs):
+        if self.request.method in ['POST', 'PUT']:
+            income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
+            expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
+        else:
+            income_formset = ExpenseIncomeFormSet(prefix='income')
+            expense_formset = ExpenseIncomeFormSet(prefix='expenses')
+
         context = {
-            'expected_income_formset': ExpenseIncomeFormSet(self.request.POST, prefix='income'),
-            'expected_expense_formset': ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
+            'expected_income_formset': income_formset,
+            'expected_expense_formset': expense_formset
         }
 
         context.update(**kwargs)

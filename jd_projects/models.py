@@ -29,7 +29,7 @@ class Project(models.Model):
 class ProjectIncomeExpenses(models.Model):
     project = models.ForeignKey('Project')
     description = models.CharField(max_length=255)
-    amount = models.DecimalField(max_digits=2)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __unicode__(self):
         return "{} - {:.2f}".format(self.description, self.amount)

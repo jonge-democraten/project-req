@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'form_utils',
+    'widget_tweaks',
     'localflavor',
     'jd_projects'
 )
@@ -82,4 +83,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "jd_projects_site", "static")
 STATIC_URL = '/static/'
+
+# Extra template directory
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, "jd_projects_site", "templates"),
+)

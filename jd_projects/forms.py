@@ -8,10 +8,10 @@ from jd_projects.models import Project, ProjectIncomeExpenses
 class ProjectRequestForm(BetterModelForm):
     class Meta:
         model = Project
-        widgets = {
-            'requester_postcode': NLZipCodeField(),
-            'requester_phone': NLPhoneNumberField()
-        }
+        #widgets = {
+        #    'requester_postcode': NLZipCodeField(),
+        #    'requester_phone': NLPhoneNumberField()
+        #}
 
         fieldsets = [
             ('Project details', {

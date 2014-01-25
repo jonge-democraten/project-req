@@ -1,0 +1,49 @@
+{% extends "master.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Projectsubsidie aanvragen{% endblock %}
+{% block pageheading %}Projectsubsidie aanvragen{% endblock %}
+
+{% block content %}
+<form class="form-horizontal" method="post" action="{% url 'request_project' %}">
+{% for fieldset in form.fieldsets %}
+<div class="panel panel-primary">
+    {% if fieldset.legend %}
+    <div class="panel-heading">{{ fieldset.legend }}</div>
+    {% endif %}
+    {% if fieldset.description %}
+    <div class="panel-body">
+        {{ fieldset.description }}
+    </div>
+    {% endif %}
+
+    {% for field in fieldset %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+            <div class="col-sm-10">
+                {% render_field field class="form-control" %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<div class="panel panel-success">
+    <div class="panel-heading">Begrote inkomsten</div>
+
+    <table class="table table-striped">
+    {{ expected_income_formset }}
+    </table>
+</div>
+
+<div class="panel panel-warning">
+    <div class="panel-heading">Begrote uitgaven</div>
+
+    <table class="table table-striped">
+    {{ expected_expense_formset }}
+    </table>
+</div>
+
+<button type="submit" class="btn btn-primary btn-lg">Aanvragen</button>
+</form>
+{% endblock %}
