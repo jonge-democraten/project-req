@@ -16,7 +16,9 @@ class ProjectRequestView(CreateView):
         income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
         expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
 
-        if income_formset.is_valid() and expense_formset.is_valid():
+        if 'extend_income_expenses' in self.request.POST:
+            return self.form_invalid(form)
+        elif income_formset.is_valid() and expense_formset.is_valid():
             response = super(ProjectRequestView, self).form_valid(form)
 
             # Save income/expenses for project
@@ -39,12 +41,26 @@ class ProjectRequestView(CreateView):
 
             return response
         else:
-            self.form_invalid(form)
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         if self.request.method in ['POST', 'PUT']:
-            income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
-            expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
+
+            old_income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
+            old_expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
+
+            income_initial = []
+            for form in old_income_formset:
+                if form.is_valid():
+                    income_initial.append(form.cleaned_data)
+
+            expense_intial = []
+            for form in old_expense_formset:
+                if form.is_valid():
+                    expense_intial.append(form.cleaned_data)
+
+            income_formset = ExpenseIncomeFormSet(initial=income_initial, prefix='income')
+            expense_formset = ExpenseIncomeFormSet(initial=expense_intial, prefix='expenses')
         else:
             income_formset = ExpenseIncomeFormSet(prefix='income')
             expense_formset = ExpenseIncomeFormSet(prefix='expenses')
