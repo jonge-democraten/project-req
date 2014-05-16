@@ -27,8 +27,8 @@ class ProjectRequestForm(BetterModelForm):
         ]
 
 class ExpenseIncomeForm(BetterForm):
-    description = forms.CharField(max_length=255)
-    amount = forms.DecimalField(max_digits=6, decimal_places=2)
+    description = forms.CharField(max_length=255, initial="", required=False)
+    amount = forms.DecimalField(max_digits=6, decimal_places=2, initial=0.0, required=False)
 
 ExpenseIncomeFormSet = formset_factory(ExpenseIncomeForm, extra=3)
 

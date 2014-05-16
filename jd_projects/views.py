@@ -16,7 +16,10 @@ class ProjectRequestView(CreateView):
         income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
         expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
 
+        print self.request.POST
+
         if 'extend_income_expenses' in self.request.POST:
+            print "Extend"
             return self.form_invalid(form)
         elif income_formset.is_valid() and expense_formset.is_valid():
             response = super(ProjectRequestView, self).form_valid(form)
@@ -26,7 +29,6 @@ class ProjectRequestView(CreateView):
                 if form.cleaned_data:
                     income = ProjectIncomeExpenses()
                     income.project = self.object
-                    print form.cleaned_data
                     income.description = form.cleaned_data['description']
                     income.amount = form.cleaned_data['amount']
                     income.save()
@@ -41,36 +43,51 @@ class ProjectRequestView(CreateView):
 
             return response
         else:
-            return self.form_invalid(form)
+            print income_formset.errors
+            print expense_formset.errors
+            print "Invalid"
+            return self.form_invalid(form, income_formset, expense_formset)
+
+    def form_invalid(self, form, income_formset=None, expense_formset=None):
+        return self.render_to_response(
+            self.get_context_data(
+                form=form,
+                expected_income_formset=income_formset,
+                expected_expense_formset=expense_formset
+            )
+        )
 
     def get_context_data(self, **kwargs):
-        if self.request.method in ['POST', 'PUT']:
+        # Keyword arguments have priority
+        income_formset = kwargs.get('expected_income_formset')
+        expense_formset = kwargs.get('expected_expense_formset')
 
-            old_income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
-            old_expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
+        if not income_formset and not expense_formset:
+            if self.request.method in ['POST', 'PUT']:
 
-            income_initial = []
-            for form in old_income_formset:
-                if form.is_valid():
-                    income_initial.append(form.cleaned_data)
+                old_income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
+                old_expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
 
-            expense_intial = []
-            for form in old_expense_formset:
-                if form.is_valid():
-                    expense_intial.append(form.cleaned_data)
+                income_initial = []
+                for form in old_income_formset:
+                    if form.is_valid():
+                        income_initial.append(form.cleaned_data)
 
-            income_formset = ExpenseIncomeFormSet(initial=income_initial, prefix='income')
-            expense_formset = ExpenseIncomeFormSet(initial=expense_intial, prefix='expenses')
-        else:
-            income_formset = ExpenseIncomeFormSet(prefix='income')
-            expense_formset = ExpenseIncomeFormSet(prefix='expenses')
+                expense_intial = []
+                for form in old_expense_formset:
+                    if form.is_valid():
+                        expense_intial.append(form.cleaned_data)
 
-        context = {
-            'expected_income_formset': income_formset,
-            'expected_expense_formset': expense_formset
-        }
+                income_formset = ExpenseIncomeFormSet(initial=income_initial, prefix='income')
+                expense_formset = ExpenseIncomeFormSet(initial=expense_intial, prefix='expenses')
+            else:
+                income_formset = ExpenseIncomeFormSet(prefix='income')
+                expense_formset = ExpenseIncomeFormSet(prefix='expenses')
 
-        context.update(**kwargs)
+            kwargs.update({
+                'expected_income_formset': income_formset,
+                'expected_expense_formset': expense_formset
+            })
 
-        return super(ProjectRequestView, self).get_context_data(**context)
+        return super(ProjectRequestView, self).get_context_data(**kwargs)
     
