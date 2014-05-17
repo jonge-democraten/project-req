@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView
 
 from jd_projects.models import Project, ProjectIncomeExpenses
@@ -18,6 +19,7 @@ class ProjectRequestView(CreateView):
         expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
 
         if 'extend_income_expenses' in self.request.POST:
+            print "extend"
             return self.form_invalid(form, extend=True)
         elif income_formset.is_valid() and expense_formset.is_valid():
             response = super(ProjectRequestView, self).form_valid(form)
@@ -46,6 +48,9 @@ class ProjectRequestView(CreateView):
 
             return response
         else:
+            print "invalid"
+            print income_formset.errors
+            print expense_formset.errors
             return self.form_invalid(form, income_formset, expense_formset)
 
     def form_invalid(self, form, income_formset=None, expense_formset=None, extend=False):
@@ -94,3 +99,5 @@ class ProjectRequestView(CreateView):
 
         return super(ProjectRequestView, self).get_context_data(**kwargs)
     
+class RequestSuccessView(TemplateView):
+    template_name = "jd_projects/request_success.html"
