@@ -1,0 +1,48 @@
+Aanvraag voor projectsubsidie
+=============================
+
+Er is een aanvraag gedaan voor projectsubsidie via de website. Hieronder staan de details.
+
+Project details
+---------------
+
+Titel: {{ project.project_title }}
+Organisatie: {{ project.project_org }}
+Locatie: {{ project.project_location }}
+Datum: {{ project.project_date }}
+Beschrijving:
+
+{{ project.project_desc }}
+{% if project.project_goal %}
+{{project.project_goal }}
+{% endif %}
+
+Aanvrager
+---------
+
+Organisatie: {{ project.requester_org }}
+Naam: {{ project.requester_name }}
+Titel/functie: {{ project.requester_title }}
+Adres: {{ project.requester_address }}
+Postcode: {{ project.requester_postcode }}
+Stad: {{ project.requester_city }}
+Email: {{ project.requester_email }}
+Telefoon: {{ project.requester_phone }}
+
+Verwachte inkomsten
+-------------------
+{% for income in project.income_expenses %} {% if income > 0 %}
+{{ income.description }} - {{ income.amount }} euro
+{% endif %} {% endfor %}
+Totaal: {{ total_income }}
+
+Verwachte uitgaven
+------------------
+{% for expense in project.income_expenses %} {% if expense < 0 %}
+{{ expense.description }} - {{ expense.amount }} euro
+{% endif %} {% endfor %}
+Totaal: {{ total_expenses }}
+
+Om dit project goed te keuren moet u naar de admin pagina gaan op
+https://projecten.jd.nl/admin
+
