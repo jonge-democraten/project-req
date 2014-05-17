@@ -3,7 +3,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
 class Project(models.Model):
-    project_title = models.CharField(_("project titel"), max_length=200)
+    project_title = models.CharField(_("projecttitel"), max_length=200)
     project_slug = models.SlugField(max_length=255)
     project_org = models.CharField(_("organisatie"), max_length=200)
     project_location = models.CharField(_("locatie"), max_length=255)
@@ -13,7 +13,7 @@ class Project(models.Model):
 
     requester_org = models.CharField(_("organisatie"), max_length=200)
     requester_name = models.CharField(_("naam"), max_length=200)
-    requester_title = models.CharField(_("titel"), max_length=200)
+    requester_title = models.CharField(_("titel/functie"), max_length=200)
     requester_address = models.CharField(_("adres"), max_length=200)
     requester_postcode = models.CharField(_("postcode"), max_length=6)
     requester_city = models.CharField(_("stad"), max_length=50)
@@ -30,7 +30,7 @@ class Project(models.Model):
         return self.project_title
 
 class ProjectIncomeExpenses(models.Model):
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', related_name='income_expenses')
     description = models.CharField(_("beschrijving"), max_length=255)
     amount = models.DecimalField(_("bedrag"), max_digits=6, decimal_places=2)
 

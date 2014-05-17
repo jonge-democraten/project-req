@@ -94,7 +94,7 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 
 # Email address to send project requests to
-PROJECT_REQUEST_EMAIL = "email@email.tld"
+PROJECT_REQUEST_RECIPIENTS = ["email@email.tld"]
 
 try:
     from .local_settings import *
