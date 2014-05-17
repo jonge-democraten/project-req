@@ -21,14 +21,11 @@ SECRET_KEY = 'odwv^jh_(l4^)sq=duu7y&yx_#wjor4n$q6uaunvy1=zqib*js'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -68,17 +65,11 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -93,3 +84,19 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, "jd_projects_site", "templates"),
 )
+
+# SMTP Server settings
+EMAIL_HOST = ""
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASS = ""
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+
+# Email address to send project requests to
+PROJECT_REQUEST_EMAIL = "email@email.tld"
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

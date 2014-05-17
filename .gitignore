@@ -40,3 +40,6 @@ nosetests.xml
 
 # Database file
 *.db
+
+# Local django settings file
+jd_projects_site/local_settings.py
