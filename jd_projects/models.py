@@ -20,6 +20,8 @@ class Project(models.Model):
     requester_email = models.EmailField(_("email"))
     requester_phone = models.CharField(_("telefoon"), max_length=15)
 
+    project_ok = models.BooleanField(_("akkoord"), default=False)
+
     def save(self, *args, **kwargs):
         self.project_slug = slugify("{}-{}".format(self.project_org, self.project_title))
         super(Project, self).save(*args, **kwargs)
@@ -33,6 +35,6 @@ class ProjectIncomeExpenses(models.Model):
     amount = models.DecimalField(_("bedrag"), max_digits=6, decimal_places=2)
 
     def __unicode__(self):
-        return "{} - {:.2f}".format(self.description, self.amount)
+        return u"{} - {:.2f}".format(self.description, self.amount)
 
 
