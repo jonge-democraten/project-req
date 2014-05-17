@@ -3,6 +3,7 @@ from django.views.generic.edit import CreateView
 
 from jd_projects.models import Project, ProjectIncomeExpenses
 from jd_projects.forms import ProjectRequestForm, ExpenseIncomeFormSet
+from jd_projects.utils import send_project_request_email
 
 class ProjectRequestView(CreateView):
     model = Project
@@ -15,8 +16,6 @@ class ProjectRequestView(CreateView):
         # If the project form is valid, we move on to checking the expected income and expenses
         income_formset = ExpenseIncomeFormSet(self.request.POST, prefix='income')
         expense_formset = ExpenseIncomeFormSet(self.request.POST, prefix='expenses')
-
-        print self.request.POST
 
         if 'extend_income_expenses' in self.request.POST:
             return self.form_invalid(form, extend=True)
@@ -41,6 +40,9 @@ class ProjectRequestView(CreateView):
                         expense.description = form.cleaned_data['description']
                         expense.amount = -form.cleaned_data['amount']
                         expense.save()
+
+            # Send email to treasurer
+            send_project_request_email(self.request, self.object)
 
             return response
         else:
